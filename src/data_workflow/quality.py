@@ -1,9 +1,10 @@
 import pandas as pd
+from typing import Dict, List, Optional
 
 
 #checking data quality
 
-def require_columns(df: pd.DataFrame, cols: list[str]) -> None:
+def require_columns(df: pd.DataFrame, cols: List[str]) -> None:
     missing_cols=[col for col in cols if col not in df.columns]
     assert not missing_cols, f"Missing required columns: {missing_cols}"
 

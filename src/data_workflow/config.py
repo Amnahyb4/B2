@@ -6,18 +6,22 @@ from pathlib import Path
 
 class Paths:
     root: Path 
+    data: Path
     raw: Path 
     processed: Path 
     cache: Path
     external: Path
+    reports: Path 
 
 
 def make_paths(root: Path) -> Paths:
     data=root / "data"
     return Paths(
-        root=data,  
+        root=root,  
+        data=data,
         raw=data / "raw",
         processed=data / "processed",
         cache=data / "cache",
-        external=data / "external"
+        external=data / "external", 
+        reports=root / "reports",
     )
