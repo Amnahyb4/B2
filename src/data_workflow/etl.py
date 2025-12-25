@@ -50,13 +50,13 @@ def transform(orders_raw:pd.DataFrame, users: pd.DataFrame)-> pd.DataFrame:
 
     orders=add_missing_flags(orders, cols=["amount", "quantity"])
 
-    orders=parse_datetime(orders, col=["created_at"], utc=True)
-    orders=add_time_parts(orders, ts_col="created_at")
+    orders=parse_datetime(orders, col="created_at", utc=True)
+    orders=add_time_parts(orders, col="created_at")
 
     joined=safe_left_join(orders, users, on="user_id", validate="many_to_one")
     assert len(joined)==len(orders), "join explosion happened"
 
-    joined==joined.assign(amount_winsor=winsorize(joined["amount"]))
+    joined=joined.assign(amount_winsor=winsorize(joined["amount"]))
     joined=add_outlier_flag(joined, "amount", k=1.5)
 
     return joined

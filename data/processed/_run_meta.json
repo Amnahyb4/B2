@@ -1,0 +1,15 @@
+{
+  "timestamp_utc": "2025-12-25T18:03:55.025695+00:00",
+  "rows_out": 5,
+  "missing_created_at": 1,
+  "country_match_rate": 1.0,
+  "config": {
+    "root": "D:\\OneDrive\\Documents\\B2",
+    "raw_orders": "D:\\OneDrive\\Documents\\B2\\data\\raw\\orders.csv",
+    "raw_users": "D:\\OneDrive\\Documents\\B2\\data\\raw\\users.csv",
+    "out_orders_clean": "D:\\OneDrive\\Documents\\B2\\data\\processed\\orders_clean.parquet",
+    "out_users": "D:\\OneDrive\\Documents\\B2\\data\\processed\\users.parquet",
+    "out_analytics": "D:\\OneDrive\\Documents\\B2\\data\\processed\\analytics_table.parquet",
+    "run_meta": "D:\\OneDrive\\Documents\\B2\\data\\processed\\_run_meta.json"
+  }
+}
