@@ -14,13 +14,16 @@ from data_workflow.quality import require_columns, asser_non_empty, assert_uniqu
 from data_workflow.config import make_paths
 
 log=logging.getLogger(__name__)
+
 def main():
     logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s:%(message)s")
 
     p=make_paths(Root)
 
+    log.info("loading raw data")
     orders_raw=read_orders_csv(p.raw/"orders.csv")
     users_raw=read_users_csv(p.raw/"users.csv")
+
 
     require_columns(orders_raw, ["order_id", "user_id", "amount", "quantity", "created_at", "status"])
     require_columns(users_raw, ["user_id", "country", "signup_date"])
@@ -57,5 +60,5 @@ def main():
     log.info("Wrote users_clean.parquet")
     log.info("wrote orders_clean.parquet")
 
-if __name__==main():
+if __name__ == "__main__":
     main()

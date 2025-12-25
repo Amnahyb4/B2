@@ -25,10 +25,10 @@ def missingness_report(df: pd.DataFrame) -> pd.DataFrame:
     }).sort_values(by="pct_missing", ascending=False)
 
 def add_missing_flags(df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    out=df.copy()
     for col in cols:
-        flag_col = f"{col}_missing"
-        df[flag_col] = df[col].isna()
-    return df
+        out[f"{col}__isna"]=out[col].isna()
+    return out
 
 def normalize_text(s: pd.Series) -> pd.Series:
     return s.str.strip().str.lower().str.replace(r"\s+", " ", regex=True)
@@ -41,5 +41,40 @@ def dedupe_keep_latest(df: pd.DataFrame, key_cols: List[str], ts_cols: str) -> p
         df.sort_values(ts_cols) #oldest to newest
         .drop_duplicates(subset=key_cols, keep="last") #duplicates are defined by keys not the whole row
         .reset_index(drop=True)
+    )
+
+def parse_datetime(df: pd.DataFrame, col: str, *, utc: bool = True) -> pd.DataFrame:
+    return df.assign(
+        **{col: pd.to_datetime(df[col], errors="coerce", utc=utc)}
+    )
+def add_time_parts(df: pd.DataFrame, col:str) -> pd.DataFrame:
+    dt = df[col]
+    return df.assign(
+        date=dt.dt.date,
+        year=dt.dt.year,
+        month=dt.dt.to_period("M").astype("string"),
+        day=dt.dt.day_name(),
+        hour=dt.dt.hour,
+       
+    )
+
+def iqr_bounds(s:pd.Series, k:float=1.5) -> tuple:
+    q1 = s.quantile(0.25)
+    q3 = s.quantile(0.75)
+    iqr = q3 - q1
+    lower_bound = q1 - k * iqr
+    upper_bound = q3 + k * iqr
+    return lower_bound, upper_bound
+
+def winsorize(s:pd.Series, lo:float=0.01, hi:float=0.99)-> pd.Series:
+    a,b=s.quantile(lo), s.quantile(hi)
+    return s.clip(lower=a, upper=b)
+    
+
+def add_outlier_flag(df: pd.DataFrame, col:str, *, k:float=1.5)-> pd.DataFrame:
+    lo, hi = iqr_bounds(df[col], k=k)
+    flag_col = f"{col}_outlier"
+    return df.assign(
+        **{flag_col: (df[col] < lo) | (df[col] > hi)}
     )
 
