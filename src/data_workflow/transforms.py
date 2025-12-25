@@ -3,8 +3,8 @@ from typing import Dict, List, Optional
 
 def enforce_schema(df: pd.DataFrame) -> pd.DataFrame:
     return df.assign(
-        order_id=df["order_id"].astype("string"),
-        user_id=df["user_id"].astype("string"),
+        order_id=df["order_id"].astype("string").str.strip(),
+        user_id=df["user_id"].astype("string").str.strip().str.zfill(4),
         amount=pd.to_numeric(df["amount"], errors="coerce").astype("float"),
         quantity=pd.to_numeric(df["quantity"], errors="coerce").astype("Int64"), 
         ## errors="coerce" will convert invalid parsing to NaN
@@ -12,8 +12,8 @@ def enforce_schema(df: pd.DataFrame) -> pd.DataFrame:
 
 def enforce_users_schema(df: pd.DataFrame) -> pd.DataFrame:
     return df.assign(
-        user_id=df["user_id"].astype("string"),
-        country=df["country"].astype("string"),
+        user_id=df["user_id"].astype("string").str.strip().str.zfill(4),
+        country=df["country"].astype("string").str.strip(),
         signup_date=pd.to_datetime(df["signup_date"], errors="coerce"),
     )
 

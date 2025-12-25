@@ -7,7 +7,7 @@ NA_VALUES = ["", "NA", "N/A", "null", "None"]
 def read_orders_csv(path:Path) -> pd.DataFrame:
     return pd.read_csv(
         path,
-        dtype={"order_id": "string", "customer_id": "string"},
+        dtype={"order_id": "string", "user_id": "string"},
         na_values=NA_VALUES,
         keep_default_na=True,
     )

@@ -30,7 +30,7 @@ def main():
     asser_non_empty(orders_clean, name="orders_clean")
     asser_non_empty(users_clean, name="users_clean")
 
-    assert_unique_keys(orders_clean, "order_id", allow_na=False)
+    assert_unique_keys(users_clean, "user_id", allow_na=False)
 
     assert_in_range(orders_clean["amount"], lo=0, hi=None, name="amount")
     assert_in_range(orders_clean["quantity"], lo=1, hi=None, name="quantity")
